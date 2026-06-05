@@ -3,10 +3,12 @@ package org.edu.member.dao;
 import org.edu.member.common.JDBCUtil;
 import org.edu.member.vo.Member;
 
+import javax.naming.NamingEnumeration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class MemberDaoImpl_JYJ implements MemberDao {
 
@@ -35,15 +37,15 @@ public class MemberDaoImpl_JYJ implements MemberDao {
         String sql = "insert into members (id, password, name, role) values (?, ?, ?, ?)";
 
         // try-with-resources문을 사용하여 작업이 끝나면 close()가 자동 호출됨
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, member.getId());
-            pstmt.setString(2, member.getPassword());
-            pstmt.setString(3, member.getName());
-            pstmt.setString(4, member.getRole());
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, member.getId());
+            stmt.setString(2, member.getPassword());
+            stmt.setString(3, member.getName());
+            stmt.setString(4, member.getRole());
 
             // select : excuteQuery();  -> ResultSet 반환
             // DML    : excuteUpdate(); -> 성공한 행의 개수 반환
-            int result = pstmt.executeUpdate();
+            int result = stmt.executeUpdate();
 
             if (result != 0) conn.commit();
 
@@ -52,19 +54,22 @@ public class MemberDaoImpl_JYJ implements MemberDao {
     }
     // 회원 부서명 조회
     @Override
-    public Member getDepName(int memberNo) {
+    public Member getDeptName(int memberNo) throws SQLException {
         String sql = "select no, d.dept_no, dept_name " +
                 "from members m " +
                 "left join departments d on m.dept_no = d.dept_no" +
                 "where no = ?";
 
+        Member mem = null;
+
         try(PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setInt(1, memberNo);
 
-            try(ResultSet re = pstmt.executeQuery()){
+            try(ResultSet rs = pstmt.executeQuery()){
+                NamingEnumeration<Object> ru;
                 if(rs.next()){
 
-                    Member mem = new Member();
+                    mem = new Member();
 
                     mem.setNo(rs.getInt("NO"));
                     mem.setName(rs.getString("NAME"));
@@ -96,5 +101,20 @@ public class MemberDaoImpl_JYJ implements MemberDao {
 
 
         }
+    }
+
+    @Override
+    public List<Member> getList() throws SQLException {
+        return List.of();
+    }
+
+    @Override
+    public Member get(int memberNo) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public int delete(int memberNo) throws SQLException {
+        return 0;
     }
 }

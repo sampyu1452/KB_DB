@@ -41,16 +41,16 @@ public class MemberService {
                         create();
                         break;
                     case 2:
-                        // getList();
+                        getList();
                         break;
                     case 3:
-                        // get();
+                         get();
                         break;
                     case 4:
                         update();
                         break;
                     case 5:
-                        // delete();
+                        delete();
                         break;
                     case 6:
                         getDeptName();
@@ -72,6 +72,7 @@ public class MemberService {
     // 회원 등록
     private void create() throws SQLException {
         System.out.println("=== 회원 등록 ===");
+
 
         // 아이디, 비밀번호, 이름, 권한 입력받아 변수에 저장
         System.out.print("아이디 : ");
@@ -177,6 +178,7 @@ public class MemberService {
             System.out.println("삭제 여부 : " + member.getDeletedYn());
         }
     }
+
 
     // 5. 회원 번호가 일치하는 회원 삭제
     private void delete() throws SQLException {
